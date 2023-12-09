@@ -127,7 +127,7 @@ void drive(double inches1, int speed) {
   chassis.wait_drive();
 }
 void turn(double theta, int speed) {
-  chassis.set_drive_pid(theta,speed);
+  chassis.set_turn_pid(theta,speed);
   chassis.wait_drive();
 }
 void skills() {
@@ -144,13 +144,23 @@ void drive_and_turn(){
   clamper.set_value(true);
   drive(13,DRIVE_SPEED);
   turn(35,TURN_SPEED);
-  drive(30,DRIVE_SPEED);
+  drive(20,DRIVE_SPEED);
   turn(-90,TURN_SPEED);
   clamper.set_value(false);
-  drive(26,DRIVE_SPEED);
+  delay(400);
+  drive(16,DRIVE_SPEED);
   //delay?
-  drive(-19,DRIVE_SPEED);
+  drive(-12,DRIVE_SPEED);
   turn(0,TURN_SPEED);
+  clamper.set_value(true);
+  delay(400);
+  turn(-90,TURN_SPEED);
+  clamper.set_value(false);
+  delay(400);
+  drive(12,DRIVE_SPEED);
+  drive(-19,DRIVE_SPEED);
+
+  
   
 
 }
@@ -161,29 +171,22 @@ void drive_and_turn(){
 // Wait Until and Changing Max Speed
 ///
 void wait_until_change_speed() {
-  // wait_until will wait until the robot gets to a desired position
-
-
-  // When the robot gets to 6 inches, the robot will travel the remaining distance at a max speed of 40
-  chassis.set_drive_pid(24, DRIVE_SPEED, true);
-  chassis.wait_until(6);
-  chassis.set_max_speed(40); // After driving 6 inches at DRIVE_SPEED, the robot will go the remaining distance at 40 speed
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(45, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(-45, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(0, TURN_SPEED);
-  chassis.wait_drive();
-
-  // When the robot gets to -6 inches, the robot will travel the remaining distance at a max speed of 40
-  chassis.set_drive_pid(-24, DRIVE_SPEED, true);
-  chassis.wait_until(-6);
-  chassis.set_max_speed(40); // After driving 6 inches at DRIVE_SPEED, the robot will go the remaining distance at 40 speed
-  chassis.wait_drive();
+  clamper.set_value(true);
+  drive(13,DRIVE_SPEED);
+  turn(35,TURN_SPEED);
+  drive(20,DRIVE_SPEED);
+  turn(-90,TURN_SPEED);
+  clamper.set_value(false);
+  delay(400);
+  drive(16,DRIVE_SPEED);
+  //delay?
+  drive(-24,DRIVE_SPEED);
+  drive(6,DRIVE_SPEED);
+  turn(0,TURN_SPEED);
+  drive(-21,DRIVE_SPEED);
+  wings.set_value(true);
+  turn(20,TURN_SPEED);
+  
 }
 void rightSide() {
   //chassis.heading

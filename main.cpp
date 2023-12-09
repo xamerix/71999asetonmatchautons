@@ -119,7 +119,6 @@ void initialize() {
   pros::Task cataCtrl(CataControl);
   stateOP = 0;
   ez::print_ez_template();
-  cata.set_brake_modes(E_MOTOR_BRAKE_HOLD);
  // cata.move_relative(-250,100);
   
   
@@ -139,9 +138,9 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
     //Auton("Example Drive\n\nDrive forward and come back.", skills),
-    Auton("first auton", drive_and_turn),
+    Auton("simple auton",wait_until_change_speed),
     Auton("skills", skills),
-    Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),
+    Auton("Drive and Turn\n\nSlow down during drive.", drive_and_turn),
     Auton("Swing Example\n\nSwing, drive, swing.", swing_example),
     Auton("Combine all 3 movements", combining_movements),
     Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
@@ -236,8 +235,10 @@ void autonomous() {
   delay(500);
 */
 }
+
 bool clampState = false;
 bool wingState = false;
+bool blockerState = false;
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
@@ -258,14 +259,16 @@ void opcontrol() {
     // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
     // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
     // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+    ///*
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_R2)) {
       clampState = !clampState;
 			clamper.set_value(clampState);
 		}
 		if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) {
       wingState = !wingState;
-      wings.set_value(wingState);
+      wings.set_value(clampState);
     }
+    //*/
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)) {
       fireCata(false);
     }
@@ -273,7 +276,8 @@ void opcontrol() {
       fireCata(true);
     }
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
-      blocker.set_value(true);
+      blockerState = !blockerState;
+      blocker.set_value(blockerState);
     }
   
     pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
