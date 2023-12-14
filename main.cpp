@@ -63,31 +63,39 @@ Drive chassis (
   // 3 Wire Port Expander Smart Port
   // ,1
 );
-
+MotorGroup cata({cataMotor1, cataMotor2});
 int stateOP = 0;
-int pressed;
 void CataControl(void*p) {
   while (true) {
   if (stateOP == 0) {
-        if (!cataLimit.get_value() && pressed == 1) {
+        if (!cataLimit.get_value()) {
           cata.move(127);
         }
-        if (cataLimit.get_value() && pressed == 1) {
+        if (cataLimit.get_value()) {
           cata.brake();
          }
         }
   
   if (stateOP == 1) {
-    if(cataLimit.get_value()) {
         cata.move(127);
         delay(400);
-        pressed = 1;
         stateOP = 0;
-        }
+        
+  }
+  else if (stateOP == 2) {
+    cata.move(127);
+    delay(29000);
+    stateOP = 1;
+  }
+  else if (stateOP == 3) {
+    cata.move(127);
+    delay(400);
+    cata.brake();
   }
   else {
     stateOP = 0;
   }
+  
 delay(20);
 }
 }
@@ -124,7 +132,7 @@ void initialize() {
   
   pros::delay(500); // Stop the user from doing anything while legacy ports configure.
 
-  // Configure your chassis controls
+  // Configure your chassis controls68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=[68=]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
   chassis.toggle_modify_curve_with_controller(false); // Enables modifying the controller curve with buttons on the joysticks
   chassis.set_active_brake(0); // Sets the active brake kP. We recommend 0.1.
   chassis.set_curve_default(0, 0); // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)  
@@ -137,11 +145,9 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-    //Auton("Example Drive\n\nDrive forward and come back.", skills),
-    Auton("simple auton",wait_until_change_speed),
     Auton("skills", skills),
+    Auton("simple auton",swing_example),
     Auton("Drive and Turn\n\nSlow down during drive.", drive_and_turn),
-    Auton("Swing Example\n\nSwing, drive, swing.", swing_example),
     Auton("Combine all 3 movements", combining_movements),
     Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
   });
@@ -266,18 +272,19 @@ void opcontrol() {
 		}
 		if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) {
       wingState = !wingState;
-      wings.set_value(clampState);
+      wings.set_value(wingState);
     }
     //*/
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)) {
-      fireCata(false);
+      stateOP = 1;
     }
-    else if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_X)) {
-      fireCata(true);
+    else if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)) {
+      stateOP = 2;
     }
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
       blockerState = !blockerState;
       blocker.set_value(blockerState);
+      stateOP = 3;
     }
   
     pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME

@@ -1,12 +1,12 @@
 #include "main.h"
 
-int lF = 8;
+int lF = 20;
 int lBt = 7;
 int lBb = 6;
 int rF = 16;
 int rBt = 5;
 int rBb = 14;
-int cata1Port = 17;
+int cata1Port = 15;
 int cata2Port = 9;
 /*
 Motor leftFront(lF,E_MOTOR_GEARSET_06, true);
@@ -24,4 +24,3 @@ ADIDigitalOut clamper('A');
 ADIDigitalOut wings('E');
 ADIDigitalOut blocker('F');
 ADIDigitalIn cataLimit('B');
-MotorGroup cata({cataMotor1, cataMotor2});

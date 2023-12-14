@@ -19,6 +19,5 @@ extern Motor cataMotor2;
 extern Rotation cataRotate;
 extern ADIDigitalOut clamper;
 extern ADIDigitalOut wings;
-extern MotorGroup cata;
 extern ADIDigitalOut blocker;
 extern ADIDigitalIn cataLimit;

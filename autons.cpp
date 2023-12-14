@@ -69,27 +69,23 @@ void modified_exit_condition() {
 ///
 // Drive Example
 ///
+MotorGroup cataA({cataMotor1, cataMotor2});
 int stateOPa = 0;
 bool retract;
 void CataControlA(bool retract) {
-  if (retract) {
-    stateOPa = 1;
-  }
-  else {
-    stateOPa = 0;
-  }
+ 
   if (stateOPa == 0) {
         if (!cataLimit.get_value()) {
-          cata.move(127);
+          cataA.move(127);
         }
         if (cataLimit.get_value()) {
-          cata.brake();
+          cataA.brake();
          }
         }
   
   if (stateOPa == 1) {
     if(cataLimit.get_value()) {
-        cata.move(127);
+        cataA.move(127);
         delay(400);
         stateOPa = 0;
         }
@@ -104,7 +100,7 @@ void fireCataA(bool matchloading) {
     stateOPa = 1;
   }
   else {
-    cata.move(127);
+    cataA.move(127);
     delay(29000);
     CataControlA(true);
   }
@@ -131,6 +127,88 @@ void turn(double theta, int speed) {
   chassis.wait_drive();
 }
 void skills() {
+  clamper.set_value(true);
+  chassis.set_turn_pid(45,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(18),DRIVE_SPEED);
+  chassis.wait_drive();
+  
+  chassis.set_turn_pid(0,TURN_SPEED);
+  clamper.set_value(false);
+  delay(300);
+  chassis.wait_drive();  
+  chassis.set_drive_pid(toCem(9),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-5),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_swing_pid(ez::RIGHT_SWING,106,SWING_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(5),DRIVE_SPEED);
+  chassis.wait_drive();
+  //fireCataA(true);
+  chassis.set_turn_pid(46,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-14.5),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(90,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-50),DRIVE_SPEED);
+  chassis.wait_drive();
+  /*
+  chassis.set_turn_pid(90,TURN_SPEED);
+  chassis.wait_drive();*/
+  chassis.set_turn_pid(135,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-13),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(180,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-9),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(5),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(-100,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-47),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(135,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-30),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(24),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(110,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-26),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(24),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(120,DRIVE_SPEED);
+  wings.set_value(true);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-26),DRIVE_SPEED);
+  chassis.wait_drive();
+  //-9
+
+
+  /*
+  chassis.wait_drive();
+  chassis.set_swing_pid(ez::LEFT_SWING,-53,SWING_SPEED);
+  chassis.wait_drive();
+  chassis.set_swing_pid(ez::RIGHT_SWING,-63,SWING_SPEED);
+  chassis.wait_drive();
+  /**  
+  delay(150);
+  chassis.set_drive_pid(24,DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-5),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_swing_pid(ez::RIGHT_SWING,100,SWING_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(6),DRIVE_SPEED);
+  chassis.wait_drive();
+  fireCataA(true);
+*/
   
 } 
 
@@ -170,25 +248,93 @@ void drive_and_turn(){
 ///
 // Wait Until and Changing Max Speed
 ///
+ 
 void wait_until_change_speed() {
+  chassis.set_turn_pid(0,TURN_SPEED);
+  chassis.wait_drive();
   clamper.set_value(true);
-  drive(13,DRIVE_SPEED);
-  turn(35,TURN_SPEED);
-  drive(20,DRIVE_SPEED);
-  turn(-90,TURN_SPEED);
+  chassis.set_turn_pid(-45,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(16),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_swing_pid(ez::LEFT_SWING,0,SWING_SPEED);
+  chassis.wait_drive();
   clamper.set_value(false);
   delay(400);
-  drive(16,DRIVE_SPEED);
-  //delay?
-  drive(-24,DRIVE_SPEED);
-  drive(6,DRIVE_SPEED);
-  turn(0,TURN_SPEED);
-  drive(-21,DRIVE_SPEED);
+  chassis.set_drive_pid(toCem(6),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-6),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(-45,TURN_SPEED);
+  chassis.wait_drive();
   wings.set_value(true);
-  turn(20,TURN_SPEED);
+  delay(100);
+  chassis.set_drive_pid(toCem(-8),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_swing_pid(ez::LEFT_SWING,-70,SWING_SPEED);
+  chassis.wait_drive();
+  wings.set_value(false);
+  chassis.set_drive_pid(toCem(-30),DRIVE_SPEED);
+  chassis.wait_drive();
+  wings.set_value(true);
+
+
   
+/*
+  chassis.set_drive_pid(toCem(-16),DRIVE_SPEED);
+  chassis.wait_drive();
+  wings.set_value(false);
+  chassis.set_turn_pid(-75,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-24),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(-90,TURN_SPEED);
+  chassis.wait_drive();
+  wings.set_value(true);
+  chassis.set_turn_pid(-95,TURN_SPEED);
+  chassis.wait_drive();
+
+
+  /*
+ // drive(18,DRIVE_SPEED);
+  chassis.set_drive_pid(toCem(18),DRIVE_SPEED);
+  chassis.wait_drive();
+ // turn(35,TURN_SPEED);
+  chassis.set_turn_pid(35,TURN_SPEED);
+  chassis.wait_drive();
+  //drive(20,DRIVE_SPEED);
+  chassis.set_drive_pid(toCem(20),DRIVE_SPEED);
+  chassis.wait_drive();
+ // turn(-90,TURN_SPEED);
+  chassis.set_turn_pid(-90,TURN_SPEED);
+  chassis.wait_drive();
+  clamper.set_value(false);
+  delay(400);
+  //drive(17,DRIVE_SPEED);
+  chassis.set_drive_pid(toCem(17),DRIVE_SPEED);
+  chassis.wait_drive();
+  //delay?
+  //drive(-24,DRIVE_SPEED);
+  chassis.set_drive_pid(toCem(-24),DRIVE_SPEED);
+  chassis.wait_drive();
+  wings.set_value(false);
+ // drive(4,DRIVE_SPEED);
+  chassis.set_drive_pid(toCem(4),DRIVE_SPEED);
+  chassis.wait_drive();
+  //turn(0,TURN_SPEED);
+  chassis.set_turn_pid(0,TURN_SPEED);
+  chassis.wait_drive();
+  //drive(-19,DRIVE_SPEED);
+  chassis.set_drive_pid(toCem(-19),DRIVE_SPEED);
+  chassis.wait_drive();
+  wings.set_value(true);
+ // turn(20,TURN_SPEED);
+  chassis.set_turn_pid(20,TURN_SPEED);
+  chassis.wait_drive();
+  */
 }
 void rightSide() {
+  
   //chassis.heading
 }
 
@@ -198,19 +344,48 @@ void rightSide() {
 // Swing Example
 ///
 void swing_example() {
-  // The first parameter is ez::LEFT_SWING or ez::RIGHT_SWING
-  // The second parameter is target degrees
-  // The third parameter is speed of the moving side of the drive
-
-
-  chassis.set_swing_pid(ez::LEFT_SWING, 45, SWING_SPEED);
+  clamper.set_value(true);
+  chassis.set_swing_pid(ez::RIGHT_SWING,-15,SWING_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(34),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(90,TURN_SPEED);
+  chassis.wait_drive();
+  clamper.set_value(false);
+  chassis.set_drive_pid(toCem(11),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-5),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(-68,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(14.25),DRIVE_SPEED);
+  chassis.wait_drive();
+  clamper.set_value(true);
+  delay(240);
+  chassis.set_turn_pid(90,TURN_SPEED);
+  chassis.wait_drive();
+  clamper.set_value(false);
+  chassis.set_drive_pid(toCem(18.5),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_swing_pid(ez::LEFT_SWING,45,SWING_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-25),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_turn_pid(0,TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(-6),DRIVE_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(toCem(2),DRIVE_SPEED);
+  chassis.wait_drive();
+  wings.set_value(true);
+  chassis.set_turn_pid(-30,TURN_SPEED);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(24, DRIVE_SPEED, true);
-  chassis.wait_until(12);
+  
 
-  chassis.set_swing_pid(ez::RIGHT_SWING, 0, SWING_SPEED);
-  chassis.wait_drive();
+
+  
+  
 }
 
 
