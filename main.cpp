@@ -63,8 +63,6 @@ Drive chassis (
   // 3 Wire Port Expander Smart Port
   // ,1
 );
-MotorGroup cata({cataMotor1, cataMotor2});
-int stateOP = 0;
 void CataControl(void*p) {
   while (true) {
   if (stateOP == 0) {
@@ -90,6 +88,9 @@ void CataControl(void*p) {
   else if (stateOP == 3) {
     cata.move(127);
     delay(400);
+    cata.brake();
+  }
+  else if (stateOP == 4) {
     cata.brake();
   }
   else {
@@ -125,7 +126,7 @@ void initialize() {
   clamper.set_value(false);
   cata.set_brake_modes(E_MOTOR_BRAKE_HOLD);
   pros::Task cataCtrl(CataControl);
-  stateOP = 0;
+  //stateOP = 0;
   ez::print_ez_template();
  // cata.move_relative(-250,100);
   
@@ -146,7 +147,7 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
     Auton("skills", skills),
-    Auton("simple auton",swing_example),
+    Auton("simple auton",nearSide),
     Auton("Drive and Turn\n\nSlow down during drive.", drive_and_turn),
     Auton("Combine all 3 movements", combining_movements),
     Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
